@@ -22,6 +22,12 @@ export function App() {
   const [slPointsStr, setSlPointsStr] = useState<string>('15.2');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+  // Strict side-by-side preference (default: true)
+  const [strictSideBySide, setStrictSideBySide] = useLocalStorage<boolean>(
+    'futures_calc_strict_side_by_side',
+    true
+  );
+
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
@@ -61,6 +67,8 @@ export function App() {
           theme={theme}
           onToggleTheme={toggleTheme}
           onLock={() => setIsAuthorized(false)}
+          strictSideBySide={strictSideBySide}
+          onToggleStrictSideBySide={() => setStrictSideBySide((prev) => !prev)}
         />
 
         <main className="main-content">
@@ -90,9 +98,9 @@ export function App() {
             </div>
           )}
 
-          {/* Position Sizing Cards (Side-by-Side on Mobile for Zero/Minimal Scroll) */}
+          {/* Position Sizing Cards (Side-by-Side on Mobile, or Stacked when Strict Side-by-Side is toggled off) */}
           <section className="results-section">
-            <div className="cards-grid">
+            <div className={`cards-grid ${strictSideBySide ? '' : 'cards-grid-stacked'}`}>
               {/* NQ Card */}
               <ContractCard result={results.nq} targetSL={slAmount} />
 

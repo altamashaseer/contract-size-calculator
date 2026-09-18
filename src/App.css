@@ -61,7 +61,13 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  position: relative;
+}
+
+.settings-anchor {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .icon-btn {
@@ -86,8 +92,166 @@
   transform: scale(0.92);
 }
 
-.theme-toggle-btn {
-  color: var(--color-nq);
+.settings-btn {
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.settings-btn.active {
+  background: var(--bg-chip);
+  border-color: var(--border-focus);
+  color: var(--color-emerald);
+}
+
+/* Settings Dropdown Popover (Anchored below settings icon) */
+.settings-popup {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 250px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.25), 0 4px 14px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  padding: 0.35rem;
+  backdrop-filter: blur(16px);
+  animation: popupFadeIn 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.popup-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.6rem;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: background var(--transition-fast), color var(--transition-fast);
+  text-align: left;
+  user-select: none;
+}
+
+.popup-item:hover,
+.popup-item:focus-visible {
+  background: var(--bg-chip);
+  outline: none;
+}
+
+.popup-item-switch {
+  cursor: pointer;
+}
+
+.popup-item-switch:hover {
+  background: var(--bg-chip);
+}
+
+.popup-item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.popup-icon {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.popup-item:hover .popup-icon {
+  color: var(--text-primary);
+}
+
+.popup-item-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.popup-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.popup-desc {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+  margin-top: 0.1rem;
+}
+
+.popup-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.12rem 0.4rem;
+  border-radius: 9999px;
+  background: var(--bg-chip);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.popup-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 0.28rem 0.2rem;
+}
+
+.popup-item-danger:hover {
+  background: var(--color-crimson-bg) !important;
+}
+
+.popup-item-danger:hover .popup-icon,
+.popup-item-danger:hover .popup-label {
+  color: var(--color-crimson) !important;
+}
+
+/* Custom Switch Toggle */
+.switch-toggle {
+  width: 36px;
+  height: 20px;
+  border-radius: 9999px;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-input);
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.switch-toggle.checked {
+  background: var(--color-emerald);
+  border-color: var(--color-emerald-border);
+}
+
+.switch-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.switch-toggle.checked .switch-thumb {
+  transform: translateX(16px);
 }
 
 /* Input Section */
@@ -416,6 +580,11 @@
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
   width: 100%;
+}
+
+.cards-grid.cards-grid-stacked {
+  grid-template-columns: 1fr;
+  grid-auto-rows: 1fr;
 }
 
 /* Contract Card */
