@@ -9,8 +9,8 @@ interface InputSectionProps {
 }
 
 const AMOUNT_PRESETS = [50, 100, 150, 200, 250, 500, 1000];
-const POINTS_PRESETS = [10, 15, 20, 25, 30, 40];
-const POINTS_TICKS = [0, 5, 10, 15, 20, 25, 30, 35, 40];
+const POINTS_PRESETS = [5, 10, 15, 20, 25, 30];
+const POINTS_TICKS = [0, 5, 10, 15, 20, 25, 30];
 
 export const InputSection: React.FC<InputSectionProps> = ({
   slAmountStr,
@@ -44,8 +44,8 @@ export const InputSection: React.FC<InputSectionProps> = ({
     setSlPointsStr(updated > 0 ? updated.toString() : '');
   };
 
-  // Slider value clamped between 0 and 40 (0 to 40 ensures linear percentage alignment with ticks)
-  const sliderValue = Math.min(40, Math.max(0, currentPoints));
+  // Slider value clamped between 0 and 30 (0 to 30 ensures linear percentage alignment with ticks)
+  const sliderValue = Math.min(30, Math.max(0, currentPoints));
 
   return (
     <div className="input-section">
@@ -161,21 +161,21 @@ export const InputSection: React.FC<InputSectionProps> = ({
           )}
         </div>
 
-        {/* Quick Points Slider for Fast Selection (0-40 pts, exact tick alignment) */}
+        {/* Quick Points Slider for Fast Selection (0-30 pts, exact tick alignment) */}
         <div className="slider-container">
           <input
             type="range"
             min="0"
-            max="40"
+            max="30"
             step="0.5"
             value={sliderValue}
             onChange={handleSliderChange}
             className="range-slider"
-            aria-label="Quick adjust Stop Loss Points (up to 40 pts)"
+            aria-label="Quick adjust Stop Loss Points (up to 30 pts)"
           />
           <div className="slider-ticks-track">
             {POINTS_TICKS.map((tick) => {
-              const p = tick / 40;
+              const p = tick / 30;
               // Compensate for 20px slider thumb width so ticks align with the exact center of the thumb
               return (
                 <span
