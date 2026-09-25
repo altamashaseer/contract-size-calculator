@@ -9,8 +9,9 @@ interface InputSectionProps {
 }
 
 const AMOUNT_PRESETS = [50, 100, 150, 200, 250, 500, 1000];
-const POINTS_PRESETS = [5, 10, 15, 20, 25, 30];
-const POINTS_TICKS = [0, 5, 10, 15, 20, 25, 30];
+const POINTS_TICKS = [5, 10, 15, 20, 25, 30];
+const MIN_SLIDER_PTS = 5;
+const MAX_SLIDER_PTS = 30;
 
 export const InputSection: React.FC<InputSectionProps> = ({
   slAmountStr,
@@ -44,8 +45,8 @@ export const InputSection: React.FC<InputSectionProps> = ({
     setSlPointsStr(updated > 0 ? updated.toString() : '');
   };
 
-  // Slider value clamped between 0 and 30 (0 to 30 ensures linear percentage alignment with ticks)
-  const sliderValue = Math.min(30, Math.max(0, currentPoints));
+  // Slider value clamped between 5 and 30
+  const sliderValue = Math.min(MAX_SLIDER_PTS, Math.max(MIN_SLIDER_PTS, currentPoints || MIN_SLIDER_PTS));
 
   return (
     <div className="input-section">
@@ -161,50 +162,39 @@ export const InputSection: React.FC<InputSectionProps> = ({
           )}
         </div>
 
-        {/* Quick Points Slider for Fast Selection (0-30 pts, exact tick alignment) */}
+        {/* Quick Points Slider for Fast Selection (5-30 pts, exact tick alignment) */}
         <div className="slider-container">
           <input
             type="range"
-            min="0"
-            max="30"
+            min={MIN_SLIDER_PTS}
+            max={MAX_SLIDER_PTS}
             step="0.5"
             value={sliderValue}
             onChange={handleSliderChange}
             className="range-slider"
-            aria-label="Quick adjust Stop Loss Points (up to 30 pts)"
+            aria-label="Quick adjust Stop Loss Points (5 to 30 pts)"
           />
           <div className="slider-ticks-track">
             {POINTS_TICKS.map((tick) => {
-              const p = tick / 30;
+              const p = (tick - MIN_SLIDER_PTS) / (MAX_SLIDER_PTS - MIN_SLIDER_PTS);
               // Compensate for 20px slider thumb width so ticks align with the exact center of the thumb
               return (
-                <span
+                <button
                   key={tick}
-                  className={`tick-label ${Math.abs(currentPoints - tick) < 0.25 ? 'tick-active' : ''}`}
+                  type="button"
+                  className={`tick-btn ${Math.abs(currentPoints - tick) < 0.25 ? 'tick-active' : ''}`}
                   style={{
                     left: `calc(${p * 100}% + ${(0.5 - p) * 20}px)`,
                   }}
                   onClick={() => setSlPointsStr(tick.toString())}
+                  title={`Set to ${tick} pts`}
+                  aria-label={`Set stop loss to ${tick} points`}
                 >
                   {tick}
-                </span>
+                </button>
               );
             })}
           </div>
-        </div>
-
-        {/* Quick Points Chips */}
-        <div className="preset-chips">
-          {POINTS_PRESETS.map((pts) => (
-            <button
-              key={pts}
-              type="button"
-              className={`chip ${slPointsStr === pts.toString() ? 'chip-active' : ''}`}
-              onClick={() => setSlPointsStr(pts.toString())}
-            >
-              {pts} pts
-            </button>
-          ))}
         </div>
       </div>
     </div>
